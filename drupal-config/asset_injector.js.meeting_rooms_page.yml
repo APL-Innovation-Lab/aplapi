@@ -7,13 +7,20 @@ dependencies:
 id: meeting_rooms_page
 label: 'Meeting Rooms page'
 code: |-
-  console.log('Meeting Rooms page')
-  document.querySelector('#loc').addEventListener('change',
-      function(event) {
-        const queryString3 = window.location.search;
-        const urlParams3 = new URLSearchParams(queryString3);
-        var go_to2 = '/meeting-rooms/calendar?loc=' + event.target.value;
-        window.location.href = go_to2;
+  console.log("Meeting Rooms page");
+
+  document.getElementById('mr-location').addEventListener('change', function() {
+      var location = this.value;
+      if (location) {
+          window.location.href = '/meeting-rooms/request?location=' + location;
+      }
+  });
+
+  document.getElementById('slr-location').addEventListener('change', function() {
+      var location = this.value;
+      if (location) {
+          window.location.href = '/slr/request?location=' + location;
+      }
   });
 noscript: ''
 noscriptRegion: {  }

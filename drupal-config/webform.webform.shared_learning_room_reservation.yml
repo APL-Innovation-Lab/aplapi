@@ -93,6 +93,18 @@ elements: |-
     '#type': date
     '#title': 'Reservation Date'
     '#required': true
+  location:
+    '#type': webform_entity_select
+    '#title': Location
+    '#prepopulate': true
+    '#required': true
+    '#target_type': taxonomy_term
+    '#selection_handler': views
+    '#selection_settings':
+      view:
+        view_name: locations_with_rooms
+        display_name: entity_reference_3
+        arguments: {  }
   full_name:
     '#type': textfield
     '#title': 'Full Name'
@@ -392,7 +404,7 @@ handlers:
       states:
         - completed
         - updated
-      to_mail: bryce.benton@austintexas.gov
+      to_mail: bryce.benton+bryce.benton+bryce.benton+bryce.benton@austintexas.gov
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }
@@ -433,7 +445,7 @@ handlers:
       states:
         - completed
         - updated
-      to_mail: bryce.benton@austintexas.gov
+      to_mail: bryce.benton+bryce.benton+bryce.benton+bryce.benton@austintexas.gov
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }
@@ -473,7 +485,7 @@ handlers:
     settings:
       states:
         - updated
-      to_mail: bryce.benton@austintexas.gov
+      to_mail: bryce.benton+bryce.benton+bryce.benton+bryce.benton@austintexas.gov
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }

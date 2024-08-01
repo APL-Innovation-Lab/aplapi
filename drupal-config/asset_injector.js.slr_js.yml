@@ -18,7 +18,7 @@ code: |-
   		let all_rooms3 = document.createElement('div');
   		all_rooms3.className = 'all-room-options view-content';
 
-  		fetch('https://library.austintexas.gov/html_slrs.json')
+  		fetch('/html_slrs.json')
   			.then(response => response.json())
   			.then(data => {
   				data.forEach(item => {
@@ -36,6 +36,7 @@ code: |-
   		});
 
   		var which_date = $('#edit-reservation-date');
+  		var which_location = $('#edit-location');
 
   		var queryString = window.location.search;
   		var pathArray = window.location.pathname.split('/');
@@ -152,7 +153,7 @@ code: |-
   			var submit_button = $('#edit-submit');
   			submit_button.val('Submit Request');
   			submit_button.prop('disabled', true);
-  			var date_wrapper = $('.form-item-reservation-date');
+  			var date_wrapper = $('.form-item-location');
   			var button_wrapper = $('#edit-actions');
   			var date1 = $('#edit-time-start-date');
   			var date2 = $('#edit-time-end-date');
@@ -173,9 +174,8 @@ code: |-
 
 
   			var avail_slots = $('#avail_slots');
-
-  			async function get_room(how_many) {
-
+  			async function get_room(how_many, which_location = null) {
+  console.log('get_room' + how_many + ' which location: ' + which_location);
   				$('.pp_avail').removeClass('active');
   				$('.room_wrapper').removeClass('inactive');
   				$('.room-option').removeClass('inactive');
@@ -212,22 +212,53 @@ code: |-
   				});
 
 
+                      if (which_location === null) {
+                          which_location = $('#edit-location').val();
+                      }
+                  
+                      let rooms_array, rooms_names, rooms_capac;
+                  
+                      switch (which_location) {
+                          case '3939':
+                              rooms_array = [3788, 3789, 3790, 3792, 3793, 3794, 3796, 3798, 3799, 3800, 3801];
+                              rooms_names = ['Shared Learning - 408 (Capacity: 4)', 'Shared Learning - 409 (Capacity: 4)', 'Shared Learning - 471 (Capacity: 10)', 'Shared Learning - 508 (Capacity: 4)', 'Shared Learning - 509 (Capacity: 4)', 'Shared Learning - 522 (Capacity: 10)', 'Shared Learning - 531 (Capacity: 10)', 'Shared Learning - 613 (Capacity: 8)', 'Shared Learning - 614 (Capacity: 8)', 'Shared Learning - 615 (Capacity: 8)', 'Shared Learning - 621 (Capacity: 10)'];
+                              rooms_capac = [4, 4, 10, 4, 4, 10, 10, 8, 8, 8, 10];
+                              if (how_many > 8) {
+                                  rooms_array = [3790, 3794, 3796, 3801];
+                                  rooms_names = ['Shared Learning - 471 (Capacity: 10)', 'Shared Learning - 522 (Capacity: 10)', 'Shared Learning - 531 (Capacity: 10)', 'Shared Learning - 621 (Capacity: 10)'];
+                                  rooms_capac = [10, 10, 10, 10];
+                              } else if (how_many > 4) {
+                                  rooms_array = [3790, 3794, 3796, 3798, 3799, 3800, 3801];
+                                  rooms_names = ['Shared Learning - 471 (Capacity: 10)', 'Shared Learning - 522 (Capacity: 10)', 'Shared Learning - 531 (Capacity: 10)', 'Shared Learning - 613 (Capacity: 8)', 'Shared Learning - 614 (Capacity: 8)', 'Shared Learning - 615 (Capacity: 8)', 'Shared Learning - 621 (Capacity: 10)'];
+                                  rooms_capac = [10, 10, 10, 8, 8, 8, 10];
+                              }
+                              break;
+                          case '205': // Ruiz
+                              rooms_array = [5315];
+                              rooms_names = ['Ruiz #3 (Capacity: 10)'];
+                              rooms_capac = [10];
+                              break;
+                          case '209': // Terrazas
+  							if (how_many > 2) {
+  								rooms_array = [5336,5337]; 
+  								rooms_names = ['Terrazas SLR #1 (Capacity: 6)','Terrazas SLR #2 (Capacity: 6)'];
+  								rooms_capac = [6,6];
+                              } else  {
+  								rooms_array = [5336,5337,5338]; 
+  								rooms_names = ['Terrazas SLR #1 (Capacity: 6)','Terrazas SLR #2 (Capacity: 6)','Terrazas SLR #3 (Capacity: 2)'];
+  								rooms_capac = [6,6,2];
+                              }
+                              break;
+                      }
+                  
+                      // Further code to use rooms_array, rooms_names, and rooms_capac
+                      console.log(rooms_array, rooms_names, rooms_capac);
+                  
+                  
 
-  				var rooms_array = [3788, 3789, 3790, 3792, 3793, 3794, 3796, 3798, 3799, 3800, 3801];
-  				var rooms_names = ['Shared Learning - 408 (Capacity: 4)', 'Shared Learning - 409 (Capacity: 4)', 'Shared Learning - 471 (Capacity: 10)', 'Shared Learning - 508 (Capacity: 4)', 'Shared Learning - 509 (Capacity: 4)', 'Shared Learning - 522 (Capacity: 10)', 'Shared Learning - 531 (Capacity: 10)', 'Shared Learning - 613 (Capacity: 8)', 'Shared Learning - 614 (Capacity: 8)', 'Shared Learning - 615 (Capacity: 8)', 'Shared Learning - 621 (Capacity: 10)'];
-  				var rooms_capac = [4, 4, 10, 4, 4, 10, 10, 8, 8, 8, 10];
-  				if (how_many > 8) {
-  					// just 10s
 
-  					var rooms_array = [3790, 3794, 3796, 3801];
-  					var rooms_names = ['Shared Learning - 471 (Capacity: 10)', 'Shared Learning - 522 (Capacity: 10)', 'Shared Learning - 531 (Capacity: 10)', 'Shared Learning - 621 (Capacity: 10)'];
-  					var rooms_capac = [10, 10, 10, 10];
-  				} else if (how_many > 4) {
-  					// just 8s and 10s
-  					var rooms_array = [3790, 3794, 3796, 3798, 3799, 3800, 3801];
-  					var rooms_names = ['Shared Learning - 471 (Capacity: 10)', 'Shared Learning - 522 (Capacity: 10)', 'Shared Learning - 531 (Capacity: 10)', 'Shared Learning - 613 (Capacity: 8)', 'Shared Learning - 614 (Capacity: 8)', 'Shared Learning - 615 (Capacity: 8)', 'Shared Learning - 621 (Capacity: 10)'];
-  					var rooms_capac = [10, 10, 10, 8, 8, 8, 10];
-  				}
+
+
   				$('.room-option').css('display', 'none');
   				for (k = 0; k < rooms_array.length; k++) {
 
@@ -281,7 +312,14 @@ code: |-
 
   				if ((disabledDays.indexOf(ch_date.format('YYYY-MM-DD'))) >= 0) { // appears in disabledDays array
   					// console.log('is holiday');
-  				} else { //not a holiday date
+  				} else
+                  if ($('#edit-location').val() === '209' && (ch_date.format('d') == '0' || ch_date.format('d') == '6')) {
+                      alert("The Terrazas Branch is closed on weekends. Please select another date or location.");
+                     $('#edit-location').val('');
+                     $('.option-5336').css('display','none');
+                  } 
+                  
+                  else { //not a holiday date
   					if (ch_date.isAfter(max_date, 'day') && (is_admin < 1)) {
   						//    console.log('is_admin? ' + is_admin);
   					} else {
@@ -371,7 +409,7 @@ code: |-
   					var the_date1 = dayjs(which_date.val());
   					var ppwf_format = 'YYYY-MM-DD';
   					var the_date = the_date1.format(ppwf_format);
-  					if (the_date == '2023-12-24' || the_date == '2023-12-25' || the_date == '2023-12-26' || the_date == '2023-12-31' || the_date == '2024-01-01' || the_date == '2024-01-14' || the_date == '2024-01-15' || the_date == '2024-02-18' || the_date == '2024-02-19' || the_date == '2024-03-22' || the_date == '2024-03-31' || the_date == '2024-05-26' || the_date == '2024-05-27' || the_date == '2024-06-19' || the_date == '2024-07-04' || the_date == '2024-08-16' || the_date == '2024-09-01' || the_date == '2024-09-02' || the_date == '2024-11-10' || the_date == '2024-11-11' || the_date == '2024-11-28' || the_date == '2024-11-29' || the_date == '2024-12-13' || the_date == '2024-12-24' || the_date == '2024-12-25') {
+  					if (the_date == '2024-08-06' || the_date == '2024-08-16' || the_date == '2024-09-01' || the_date == '2024-09-02' || the_date == '2024-11-10' || the_date == '2024-11-11' || the_date == '2024-11-28' || the_date == '2024-11-29' || the_date == '2024-12-13' || the_date == '2024-12-24' || the_date == '2024-12-25') {
   						alert("The Library is closed on that day. Please select another date.");
   						which_date.val('');
   					} else {
@@ -380,7 +418,8 @@ code: |-
   							alert('Please select a date within the next 2 weeks');
   							which_date.val('');
   						} else {
-  							get_room(how_many1.val());
+                              var which_location = $('#edit-location').val();
+  							get_room(how_many1.val(), which_location);
   							availStarts = [];
   							submit_button.prop('disabled', true);
   							date1.val($(this).attr('data-date'));
@@ -393,8 +432,8 @@ code: |-
   			});
   			$('.new_check').click(function (e) {
   				e.preventDefault();
-
-  				get_room(how_many1.val());
+                  var which_location = $('#edit-location').val();
+  				get_room(how_many1.val(), which_location);
   				availStarts = [];
   				submit_button.prop('disabled', true);
   				date1.val($(this).attr('data-date'));
@@ -408,7 +447,8 @@ code: |-
   					alert('The maximum capacity is 10.');
   				} else {
   					if ($.isNumeric(my_people)) {
-  						get_room(how_many1.val());
+                          var which_location = $('#edit-location').val();
+  						get_room(how_many1.val(), which_location);
   						availStarts = [];
   						submit_button.prop('disabled', true);
   						date1.val($(this).attr('data-date'));
@@ -463,8 +503,8 @@ code: |-
   						$('.pp_avail').removeClass('active');
   						$('.room_wrapper').removeClass('inactive');
   						$('.room-option').removeClass('inactive');
-
-  						get_room(how_many1.val());
+                          var which_location = $('#edit-location').val();
+  						get_room(how_many1.val(), which_location);
   						availStarts = [];
   						submit_button.prop('disabled', true);
   						date1.val($(this).attr('data-date'));
@@ -485,7 +525,18 @@ code: |-
   				$('#edit-duration').change(function (e) {
   					if (e.handled !== true) {
   						e.handled = true;
-  						get_room(how_many1.val());
+                          var which_location = $('#edit-location').val();
+  						get_room(how_many1.val(), which_location);
+  						availStarts = [];
+  						submit_button.prop('disabled', true);
+  						return;
+  					}
+  				});
+  				$('#edit-location').change(function (e) {
+  					if (e.handled !== true) {
+  						e.handled = true;
+                          var which_location = $('#edit-location').val();
+  						get_room(how_many1.val(), which_location);
   						availStarts = [];
   						submit_button.prop('disabled', true);
   						return;

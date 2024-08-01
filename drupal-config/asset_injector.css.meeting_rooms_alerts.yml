@@ -5,11 +5,59 @@ dependencies:
   module:
     - system
 id: meeting_rooms_alerts
-label: 'meeting rooms alerts'
+label: 'meeting rooms page'
 code: |
+  .apl-language-switcher {
+  	margin: 0 0 1em 1em;
+  }
+  .grid-row.roomBoxes {
+  	justify-content: space-between;
+  }
+  h1.grid-col-10.grid-offset-1 {
+  	display: none;
+  }
+
+  .roomBoxes .roomBox h1 {
+  	color: #009abf;
+  	font-size: 22px !important;
+  	padding: 0 !important;
+  }
+  .roomBox h2 {
+  	font-size: 28px !important;
+  }
+  .roomBox p {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+  	position: absolute;
+  	bottom: 0;
+  }
+  .roomBox p label {
+      margin-right: 10px;
+      flex: 0 0 auto;
+  }
+
+  .roomBox p select {
+      flex: 1 1 auto;
+      max-width: 95%;
+  }
+  .roomBox {
+  	padding: 16px 16px 90px;
+  	background: #fff;
+  	text-align: left;
+  	margin-bottom: 16px;
+  	border: 1px solid #016e98 !important;
+  	border-radius: 3px;
+  	box-shadow: 4px 4px 4px 0 rgba(0,0,0,0.15);
+  }
+  .roomBox ul {
+  	margin: 0 0 1em 0;
+  	padding: 0 1em;
+  }
   .usa-navbar {
   	padding: 0 !important;
   }
+
   header .flex-grid {
   	display: flex;
   	justify-content: space-between;
@@ -129,7 +177,7 @@ code: |
    vertical-align:unset
   }
 media: all
-preprocess: true
+preprocess: false
 conditions:
   request_path:
     id: request_path
